@@ -7,6 +7,7 @@ import {
   StyleSheet,
   SafeAreaView,
   FlatList,
+  ScrollView,
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import {Picker} from '@react-native-picker/picker';
@@ -28,8 +29,8 @@ interface Errors {
   confirmPassword: string;
 }
 const options = [
-  {label: 'Metriculation', value: 'Metriculation'},
-  {label: 'Intermediate', value: 'Intermediate'},
+  {label: 'Metric', value: 'Metriculation'},
+  {label: 'Inter', value: 'Intermediate'},
   {label: 'Graducate', value: 'Graducate'},
 ];
 
@@ -61,7 +62,7 @@ const Form: React.FC = () => {
     {id: 1, label: 'Cricket', isChecked: false},
     {id: 2, label: 'Chess ', isChecked: false},
     {id: 3, label: 'Carrom', isChecked: false},
-    {id: 3, label: 'Badminton', isChecked: false},
+    {id: 4, label: 'Badminton', isChecked: false},
   ]);
 
   const toggleCheckBox = (id: any) => {
@@ -162,142 +163,155 @@ const Form: React.FC = () => {
       };
       console.log('----data----', data);
     }
+    setFields({
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      mobile: '',
+    });
+    setGender('');
+    setQualification('');
+    setCheckboxes([]);
   };
   return (
     <SafeAreaView style={Styles.container}>
-      <Text style={Styles.titleStyle}>Form</Text>
-      <View>
-        <TextInput
-          style={Styles.textInputStyle}
-          value={fields.firstName}
-          onChangeText={value => handleUserInput('firstName', value)}
-          placeholder="Enter first name"
-          placeholderTextColor="#909090"
-        />
-        {errors.firstName ? (
-          <Text style={Styles.nameTextStyleError}>{errors.firstName}</Text>
-        ) : null}
-      </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Text style={Styles.titleStyle}>Form</Text>
+        <View>
+          <TextInput
+            style={Styles.textInputStyle}
+            value={fields.firstName}
+            onChangeText={value => handleUserInput('firstName', value)}
+            placeholder="Enter first name"
+            placeholderTextColor="#909090"
+          />
+          {errors.firstName ? (
+            <Text style={Styles.nameTextStyleError}>{errors.firstName}</Text>
+          ) : null}
+        </View>
 
-      <View>
-        <TextInput
-          style={Styles.textInputStyle}
-          value={fields.lastName}
-          onChangeText={value => handleUserInput('lastName', value)}
-          placeholder="Enter last name"
-          placeholderTextColor="#909090"
-        />
-      </View>
+        <View>
+          <TextInput
+            style={Styles.textInputStyle}
+            value={fields.lastName}
+            onChangeText={value => handleUserInput('lastName', value)}
+            placeholder="Enter last name"
+            placeholderTextColor="#909090"
+          />
+        </View>
 
-      <View>
-        <TextInput
-          style={Styles.textInputStyle}
-          value={fields.email}
-          onChangeText={value => handleUserInput('email', value)}
-          placeholder="Enter email address"
-          placeholderTextColor="#909090"
-        />
-        {errors.email ? (
-          <Text style={Styles.nameTextStyleError}>{errors.email}</Text>
-        ) : null}
-      </View>
+        <View>
+          <TextInput
+            style={Styles.textInputStyle}
+            value={fields.email}
+            onChangeText={value => handleUserInput('email', value)}
+            placeholder="Enter email address"
+            placeholderTextColor="#909090"
+          />
+          {errors.email ? (
+            <Text style={Styles.nameTextStyleError}>{errors.email}</Text>
+          ) : null}
+        </View>
 
-      <View>
-        <TextInput
-          style={Styles.textInputStyle}
-          value={fields.mobile}
-          onChangeText={value => handleUserInput('mobile', value)}
-          placeholder=" Enter mobile"
-          maxLength={10}
-          placeholderTextColor="#909090"
-        />
-        {errors.mobile ? (
-          <Text style={Styles.nameTextStyleError}>{errors.mobile}</Text>
-        ) : null}
-      </View>
+        <View>
+          <TextInput
+            style={Styles.textInputStyle}
+            value={fields.mobile}
+            onChangeText={value => handleUserInput('mobile', value)}
+            placeholder=" Enter mobile"
+            maxLength={10}
+            placeholderTextColor="#909090"
+          />
+          {errors.mobile ? (
+            <Text style={Styles.nameTextStyleError}>{errors.mobile}</Text>
+          ) : null}
+        </View>
 
-      <View style={Styles.genderqualiViewStyle}>
-        <View style={Styles.radioButtonViewStyle}>
-          <Text style={Styles.label}>Select Gender:</Text>
-          <View style={Styles.radioButtonContainer}>
-            <RadioButton.Group
-              onValueChange={newValue => setGender(newValue)}
-              value={gender}>
-              <View style={Styles.radioButton}>
-                <Text style={Styles.label}>Male</Text>
-                <RadioButton value="male" />
-                <Text style={Styles.label}>Female</Text>
-                <RadioButton value="female" />
-              </View>
-            </RadioButton.Group>
+        <View style={Styles.genderqualiViewStyle}>
+          <View style={Styles.radioButtonViewStyle}>
+            <Text style={Styles.label}>Select Gender:</Text>
+            <View style={Styles.radioButtonContainer}>
+              <RadioButton.Group
+                onValueChange={newValue => setGender(newValue)}
+                value={gender}>
+                <View style={Styles.radioButton}>
+                  <Text style={Styles.label}>Male</Text>
+                  <RadioButton value="male" />
+                  <Text style={Styles.label}>Female</Text>
+                  <RadioButton value="female" />
+                </View>
+              </RadioButton.Group>
+            </View>
+          </View>
+
+          <View>
+            <Text style={Styles.qualificationStyle}>Qualification</Text>
+            <Picker
+              selectedValue={qualification}
+              style={Styles.pickerStyle}
+              onValueChange={handleValueChange}>
+              {options.map(option => (
+                <Picker.Item
+                  key={option.value}
+                  label={option.label}
+                  value={option.value}
+                />
+              ))}
+            </Picker>
           </View>
         </View>
 
         <View>
-          <Text style={Styles.qualificationStyle}>Qualification</Text>
-          <Picker
-            selectedValue={qualification}
-            style={Styles.pickerStyle}
-            onValueChange={handleValueChange}>
-            {options.map(option => (
-              <Picker.Item
-                key={option.value}
-                label={option.label}
-                value={option.value}
-              />
-            ))}
-          </Picker>
+          <Text style={Styles.qualificationStyle}>Hobbies</Text>
+          <FlatList
+            numColumns={2}
+            data={checkboxes}
+            renderItem={({item}) => (
+              <View style={Styles.checkBoxViewStyle}>
+                <CheckBox
+                  value={item.isChecked}
+                  onValueChange={() => toggleCheckBox(item.id)}
+                />
+                <Text style={Styles.checkBoxStyle}>{item.label}</Text>
+              </View>
+            )}
+            keyExtractor={item => item.id.toString()}
+          />
         </View>
-      </View>
-
-      <View>
-        <Text style={Styles.qualificationStyle}>Hobbies</Text>
-        <FlatList
-          numColumns={2}
-          data={checkboxes}
-          renderItem={({item}) => (
-            <View style={Styles.checkBoxViewStyle}>
-              <CheckBox
-                value={item.isChecked}
-                onValueChange={() => toggleCheckBox(item.id)}
-              />
-              <Text style={Styles.checkBoxStyle}>{item.label}</Text>
-            </View>
-          )}
-          keyExtractor={item => item.id.toString()}
-        />
-      </View>
-      <View>
-        <TextInput
-          style={Styles.textInputStyle}
-          value={fields.password}
-          onChangeText={value => handleUserInput('password', value)}
-          placeholder=" Enter password"
-          placeholderTextColor="#909090"
-          secureTextEntry={true}
-        />
-        {errors.password ? (
-          <Text style={Styles.nameTextStyleError}>{errors.password}</Text>
-        ) : null}
-      </View>
-      <View>
-        <TextInput
-          style={Styles.textInputStyle}
-          value={fields.confirmPassword}
-          onChangeText={value => handleUserInput('confirmPassword', value)}
-          placeholder="Enter confirm password"
-          placeholderTextColor="#909090"
-          secureTextEntry={true}
-        />
-        {errors.confirmPassword ? (
-          <Text style={Styles.nameTextStyleError}>
-            {errors.confirmPassword}
-          </Text>
-        ) : null}
-      </View>
-      <TouchableOpacity style={{alignSelf: 'center'}} onPress={handleSubmit}>
-        <Text style={Styles.nameTextStyleBtn}>Submit</Text>
-      </TouchableOpacity>
+        <View>
+          <TextInput
+            style={Styles.textInputStyle}
+            value={fields.password}
+            onChangeText={value => handleUserInput('password', value)}
+            placeholder=" Enter password"
+            placeholderTextColor="#909090"
+            secureTextEntry={true}
+          />
+          {errors.password ? (
+            <Text style={Styles.nameTextStyleError}>{errors.password}</Text>
+          ) : null}
+        </View>
+        <View>
+          <TextInput
+            style={Styles.textInputStyle}
+            value={fields.confirmPassword}
+            onChangeText={value => handleUserInput('confirmPassword', value)}
+            placeholder="Enter confirm password"
+            placeholderTextColor="#909090"
+            secureTextEntry={true}
+          />
+          {errors.confirmPassword ? (
+            <Text style={Styles.nameTextStyleError}>
+              {errors.confirmPassword}
+            </Text>
+          ) : null}
+        </View>
+        <TouchableOpacity style={{alignSelf: 'center'}} onPress={handleSubmit}>
+          <Text style={Styles.nameTextStyleBtn}>Submit</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -320,6 +334,7 @@ const Styles = StyleSheet.create({
     paddingHorizontal: 40,
     paddingVertical: 5,
     borderRadius: 10,
+    marginVertical: 10,
   },
   nameTextStyleError: {
     fontSize: 16,
@@ -371,7 +386,7 @@ const Styles = StyleSheet.create({
     fontSize: 18,
   },
   pickerStyle: {
-    width: 180,
+    width: 160,
     height: 40,
     marginHorizontal: 20,
   },
