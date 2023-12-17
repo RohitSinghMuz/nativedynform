@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import {RadioButton} from 'react-native-paper';
+import {Picker} from '@react-native-picker/picker';
 
 interface State {
   firstName: string;
@@ -23,6 +25,11 @@ interface Errors {
   mobile: string;
   confirmPassword: string;
 }
+const options = [
+  {label: 'Metriculation', value: 'Metriculation'},
+  {label: 'Intermediate', value: 'Intermediate'},
+  {label: 'Graducate', value: 'Graducate'},
+];
 
 const App: React.FC = () => {
   const [fields, setFields] = useState<State>({
@@ -34,6 +41,9 @@ const App: React.FC = () => {
     mobile: '',
   });
 
+  const [gender, setGender] = useState('male');
+  const [qualification, setQualification] = useState('');
+
   const [errors, setErrors] = useState<Errors>({
     firstName: '',
     email: '',
@@ -41,6 +51,9 @@ const App: React.FC = () => {
     mobile: '',
     confirmPassword: '',
   });
+  const handleValueChange = (itemValue: any) => {
+    setQualification(itemValue);
+  };
 
   const validate = (name: keyof State, value: string): string => {
     switch (name) {
@@ -124,6 +137,9 @@ const App: React.FC = () => {
         email: fields.email,
         password: fields.password,
         mobile: fields.mobile,
+        lastName: fields.lastName,
+        gender: gender,
+        qualification: qualification,
       };
       console.log('----data----', data);
     }
@@ -179,6 +195,40 @@ const App: React.FC = () => {
         {errors.mobile ? (
           <Text style={Styles.nameTextStyleError}>{errors.mobile}</Text>
         ) : null}
+      </View>
+
+      <View style={Styles.genderqualiViewStyle}>
+        <View style={Styles.radioButtonViewStyle}>
+          <Text style={Styles.label}>Select Gender:</Text>
+          <View style={Styles.radioButtonContainer}>
+            <RadioButton.Group
+              onValueChange={newValue => setGender(newValue)}
+              value={gender}>
+              <View style={Styles.radioButton}>
+                <Text style={Styles.label}>Male</Text>
+                <RadioButton value="male" />
+                <Text style={Styles.label}>Female</Text>
+                <RadioButton value="female" />
+              </View>
+            </RadioButton.Group>
+          </View>
+        </View>
+
+        <View>
+          <Text style={Styles.qualificationStyle}>Qualification</Text>
+          <Picker
+            selectedValue={qualification}
+            style={Styles.pickerStyle}
+            onValueChange={handleValueChange}>
+            {options.map(option => (
+              <Picker.Item
+                key={option.value}
+                label={option.label}
+                value={option.value}
+              />
+            ))}
+          </Picker>
+        </View>
       </View>
       <View>
         <TextInput
@@ -257,5 +307,41 @@ const Styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     margin: 10,
+  },
+  label: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  qualificationStyle: {
+    fontSize: 18,
+    paddingHorizontal: 10,
+    marginHorizontal: 20,
+  },
+  radioButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  radioButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  radioButtonViewStyle: {
+    paddingHorizontal: 10,
+    color: 'black',
+    marginHorizontal: 20,
+    fontSize: 18,
+  },
+  pickerStyle: {
+    width: 200,
+    height: 40,
+    marginHorizontal: 20,
+  },
+  genderqualiViewStyle: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginHorizontal: 20,
+    marginVertical: 5,
   },
 });
