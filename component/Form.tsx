@@ -5,10 +5,12 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  SafeAreaView,
+  FlatList,
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import {Picker} from '@react-native-picker/picker';
-
+import CheckBox from '@react-native-community/checkbox';
 interface State {
   firstName: string;
   lastName: string;
@@ -31,7 +33,7 @@ const options = [
   {label: 'Graducate', value: 'Graducate'},
 ];
 
-const App: React.FC = () => {
+const Form: React.FC = () => {
   const [fields, setFields] = useState<State>({
     firstName: '',
     lastName: '',
@@ -53,6 +55,22 @@ const App: React.FC = () => {
   });
   const handleValueChange = (itemValue: any) => {
     setQualification(itemValue);
+  };
+
+  const [checkboxes, setCheckboxes] = useState([
+    {id: 1, label: 'Cricket', isChecked: false},
+    {id: 2, label: 'Chess ', isChecked: false},
+    {id: 3, label: 'Carrom', isChecked: false},
+    {id: 3, label: 'Badminton', isChecked: false},
+  ]);
+
+  const toggleCheckBox = (id: any) => {
+    const updatedCheckboxes = checkboxes.map(checkbox =>
+      checkbox.id === id
+        ? {...checkbox, isChecked: !checkbox.isChecked}
+        : checkbox,
+    );
+    setCheckboxes(updatedCheckboxes);
   };
 
   const validate = (name: keyof State, value: string): string => {
@@ -140,12 +158,13 @@ const App: React.FC = () => {
         lastName: fields.lastName,
         gender: gender,
         qualification: qualification,
+        checkboxes: checkboxes,
       };
       console.log('----data----', data);
     }
   };
   return (
-    <View style={Styles.container}>
+    <SafeAreaView style={Styles.container}>
       <Text style={Styles.titleStyle}>Form</Text>
       <View>
         <TextInput
@@ -230,6 +249,24 @@ const App: React.FC = () => {
           </Picker>
         </View>
       </View>
+
+      <View>
+        <Text style={Styles.qualificationStyle}>Hobbies</Text>
+        <FlatList
+          numColumns={2}
+          data={checkboxes}
+          renderItem={({item}) => (
+            <View style={Styles.checkBoxViewStyle}>
+              <CheckBox
+                value={item.isChecked}
+                onValueChange={() => toggleCheckBox(item.id)}
+              />
+              <Text style={Styles.checkBoxStyle}>{item.label}</Text>
+            </View>
+          )}
+          keyExtractor={item => item.id.toString()}
+        />
+      </View>
       <View>
         <TextInput
           style={Styles.textInputStyle}
@@ -237,6 +274,7 @@ const App: React.FC = () => {
           onChangeText={value => handleUserInput('password', value)}
           placeholder=" Enter password"
           placeholderTextColor="#909090"
+          secureTextEntry={true}
         />
         {errors.password ? (
           <Text style={Styles.nameTextStyleError}>{errors.password}</Text>
@@ -249,6 +287,7 @@ const App: React.FC = () => {
           onChangeText={value => handleUserInput('confirmPassword', value)}
           placeholder="Enter confirm password"
           placeholderTextColor="#909090"
+          secureTextEntry={true}
         />
         {errors.confirmPassword ? (
           <Text style={Styles.nameTextStyleError}>
@@ -259,11 +298,11 @@ const App: React.FC = () => {
       <TouchableOpacity style={{alignSelf: 'center'}} onPress={handleSubmit}>
         <Text style={Styles.nameTextStyleBtn}>Submit</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
-export default App;
+export default Form;
 
 const Styles = StyleSheet.create({
   container: {
@@ -273,15 +312,14 @@ const Styles = StyleSheet.create({
   nameTextStyleBtn: {
     fontSize: 28,
     fontFamily: 'poppins',
+    fontWeight: '700',
     color: '#f0f0f0',
     margin: 5,
     marginHorizontal: 20,
-    backgroundColor: '#ff7d10',
+    backgroundColor: '#0C99EB',
     paddingHorizontal: 40,
     paddingVertical: 5,
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#ff7d10',
   },
   nameTextStyleError: {
     fontSize: 16,
@@ -333,7 +371,7 @@ const Styles = StyleSheet.create({
     fontSize: 18,
   },
   pickerStyle: {
-    width: 200,
+    width: 180,
     height: 40,
     marginHorizontal: 20,
   },
@@ -343,5 +381,16 @@ const Styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginHorizontal: 20,
     marginVertical: 5,
+  },
+  checkBoxStyle: {
+    marginHorizontal: 5,
+    fontFamily: 'Poppins',
+    fontSize: 18,
+  },
+  checkBoxViewStyle: {
+    marginVertical: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 20,
   },
 });
