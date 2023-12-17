@@ -9,6 +9,7 @@ import {
 
 interface State {
   firstName: string;
+  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -26,6 +27,7 @@ interface Errors {
 const App: React.FC = () => {
   const [fields, setFields] = useState<State>({
     firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -127,8 +129,8 @@ const App: React.FC = () => {
     }
   };
   return (
-    <View style={{backgroundColor: '#FFFFFF', flex: 1}}>
-      <Text style={Styles.nameTextStyle}>Form</Text>
+    <View style={Styles.container}>
+      <Text style={Styles.titleStyle}>Form</Text>
       <View>
         <TextInput
           style={Styles.textInputStyle}
@@ -137,8 +139,21 @@ const App: React.FC = () => {
           placeholder="Enter first name"
           placeholderTextColor="#909090"
         />
-        <Text style={Styles.nameTextStyleError}>{errors.firstName}</Text>
+        {errors.firstName ? (
+          <Text style={Styles.nameTextStyleError}>{errors.firstName}</Text>
+        ) : null}
       </View>
+
+      <View>
+        <TextInput
+          style={Styles.textInputStyle}
+          value={fields.lastName}
+          onChangeText={value => handleUserInput('lastName', value)}
+          placeholder="Enter last name"
+          placeholderTextColor="#909090"
+        />
+      </View>
+
       <View>
         <TextInput
           style={Styles.textInputStyle}
@@ -147,8 +162,11 @@ const App: React.FC = () => {
           placeholder="Enter email address"
           placeholderTextColor="#909090"
         />
-        <Text style={Styles.nameTextStyleError}>{errors.email}</Text>
+        {errors.email ? (
+          <Text style={Styles.nameTextStyleError}>{errors.email}</Text>
+        ) : null}
       </View>
+
       <View>
         <TextInput
           style={Styles.textInputStyle}
@@ -158,7 +176,9 @@ const App: React.FC = () => {
           maxLength={10}
           placeholderTextColor="#909090"
         />
-        <Text style={Styles.nameTextStyleError}>{errors.mobile}</Text>
+        {errors.mobile ? (
+          <Text style={Styles.nameTextStyleError}>{errors.mobile}</Text>
+        ) : null}
       </View>
       <View>
         <TextInput
@@ -168,7 +188,9 @@ const App: React.FC = () => {
           placeholder=" Enter password"
           placeholderTextColor="#909090"
         />
-        <Text style={Styles.nameTextStyleError}>{errors.password}</Text>
+        {errors.password ? (
+          <Text style={Styles.nameTextStyleError}>{errors.password}</Text>
+        ) : null}
       </View>
       <View>
         <TextInput
@@ -178,7 +200,11 @@ const App: React.FC = () => {
           placeholder="Enter confirm password"
           placeholderTextColor="#909090"
         />
-        <Text style={Styles.nameTextStyleError}>{errors.confirmPassword}</Text>
+        {errors.confirmPassword ? (
+          <Text style={Styles.nameTextStyleError}>
+            {errors.confirmPassword}
+          </Text>
+        ) : null}
       </View>
       <TouchableOpacity style={{alignSelf: 'center'}} onPress={handleSubmit}>
         <Text style={Styles.nameTextStyleBtn}>Submit</Text>
@@ -190,13 +216,10 @@ const App: React.FC = () => {
 export default App;
 
 const Styles = StyleSheet.create({
-  nameTextStyle: {
-    fontSize: 22,
-    fontFamily: 'poppins',
-    color: 'black',
-    margin: 5,
-    marginHorizontal: 20,
+  container: {
+    flex: 1,
   },
+
   nameTextStyleBtn: {
     fontSize: 28,
     fontFamily: 'poppins',
@@ -211,20 +234,28 @@ const Styles = StyleSheet.create({
     borderColor: '#ff7d10',
   },
   nameTextStyleError: {
-    fontSize: 22,
+    fontSize: 16,
     fontFamily: 'poppins',
-    color: 'black',
+    color: 'red',
     marginHorizontal: 20,
   },
 
   textInputStyle: {
     borderColor: '#f0f0f0',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'white',
     paddingHorizontal: 10,
     color: 'black',
     borderWidth: 2,
     marginHorizontal: 20,
-    fontSize: 22,
+    fontSize: 16,
     borderRadius: 10,
+    marginVertical: 10,
+  },
+  titleStyle: {
+    textAlign: 'center',
+    fontFamily: 'Poppins',
+    fontSize: 22,
+    fontWeight: 'bold',
+    margin: 10,
   },
 });
